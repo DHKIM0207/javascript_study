@@ -1,0 +1,106 @@
+<html>
+    <head>클로저를 활용할 때 주의사항</head>
+    <body>
+        <script>
+            function outerFunc(argNum){
+                var num = argNum;
+                return function(x){
+                    num += x;
+                    console.log('num: ' + num);
+                }
+            }
+            var exam = outerFunc(40);
+            exam(5);
+            exam(-10);
+        </script>
+        <script>
+            function func(){
+                var x = 1;
+                return {
+                    func1: function(){ console.log(++x); },
+                    func2: function() { console.log(-x); }
+                };
+            };
+            var exam = func();
+            exam.func1();
+            exam.func2();
+        </script>
+        <!--
+        <script>
+            function countSeconds(howMany){
+                for (var i = 1; i <= howMany; i++){
+                    setTimeout(function(){
+                        console.log(i);
+                    }, i * 1000);
+                }
+            }
+            countSeconds(3);
+        </script> -->
+        <script>
+            function countSeconds(howMany){
+                for (var i = 1; i <= howMany; i++){
+                    (function (currentI){
+                        setTimeout(function(){
+                            console.log(currentI);
+                        }, currentI * 1000);
+                    })(i);
+                }
+            }
+            countSeconds(4);
+        </script>
+        <div id="root">
+            <div id="textAreaDiv1">
+                <textarea name="" id="" cols="130" rows="10">
+                    지금까지 클로저의 개념과 활용을 알아봤다. 앞서 언급한 대로 클로저는 자바스크립트의 강력한
+                    기능이지만, 너무 남발하여 사용하면 안된다. 여기서는 클로저에서 사용자가 쉽게 간과할 수 있는
+                    사항을 정리했다.
+
+                    =====================================================================
+                    클로저의 프로퍼티값이 쓰기 가능하므로 그 값이 여러 번 호출로 항상 변할 수 있음에 유의해야 한다
+
+                </textarea>
+            </div>
+            <div id="imgDiv1">
+                <img src="클로저주의사항1.png">
+            </div>
+            <div id="textAreaDiv2">
+                <textarea name="" id="" cols="130" rows="10">
+                    예제 5-14에서 보는 바와 같이 exam 값을 호출할 때마다, 자유변수 num의 값은 계속해서 변화하니 주의하기 바란다.
+
+                    하나의 클로저가 여러 함수 객체의 스코프 체인에 들어가 있는 경우도 있다.
+
+                    예제 5-15에서 반환되는 객체에는 두 개의 함수가 정의되어 있는데, 두 함수 모두 자유 변수 x를 참조한다.
+                    그리고 각각의 함수가 호출될 때마다 x 값이 변화하므로 유의해야한다.
+                </textarea>
+            </div>
+            <img src="클로저주의사항2.png">
+            <div id="textAreaDiv3">
+                <textarea name="" id="" cols="130" rows="10">
+                    이번에 소개할 주의사항은 클로저 설명에서 단골손님처럼 등장하는 예제 코드이다.
+
+                    예제 5-16은 1, 2, 3을 1초 간격으로 출력하는 의도로 만든 예제다. 하지만 결과는 4가 연속
+                    3번 1초 간격으로 출력된다. 클로저를 잘 이해했다면, 이유를 쉽게 이해할 수 있을 것이다.
+
+                    setTimeout 함수의 인자로 들어가는 함쑤는 자유 변수 i를 참조한다. 하지만 이 함수가 실행되는 시점은
+                    countSeconds() 함수의 실행이 종료된 이후이고, i값은 이미4가 된 상태이다. 
+                    그러므로 setTimeout()로 실행되는 함수는 모두 4를 출력하게 된다.
+                </textarea>
+            </div>
+            <img src="클로저주의사항3.png">
+            <div id="textAreaDiv4">
+                <textarea name="" id="" cols="130" rows="10">
+                    이제 원하는 결과를 얻기 위해 이 코드를 수정해보자. 이를 위해서는 루프 i 값 복사본을 함수에 넘겨준다.
+                    이를 위해 즉시 실행 함수를 사용했다.
+
+                    즉시 실행 함수를 실행시켜 루프 i 값을 currentI에 복사해서 setTimeout()에 들어갈 함수에서
+                    사용하면, 원하는 결과를 얻을 수 있다.
+
+                    지금까지 실행 컨텍스트, 스코프 체인 및 클로저를 알아봤다. 우리가 자바스크립트 라이브러리를 만들고자 할 때
+                    이에 대한 지식 없이 만든다면 이름 충돌, 성능 저하, 비효율적 자원 활용 등의 문제가 틀림없이 발생할 것이고,
+                    이는 좋은 라이브러리라고 할 수 없다. 반드시 지식을 갖춘 후 개발하자.
+                </textarea>
+            </div>
+            <img src="클로저주의사항4.png">
+        </div>
+    </body>
+</html>
