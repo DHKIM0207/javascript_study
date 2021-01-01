@@ -1,0 +1,153 @@
+<html>
+    <head>캡슐화</head>
+    <body>
+        <!-- <script>
+            var Person = function(arg){
+                var name = arg ? arg : "zzoon";
+
+                this.getName = function(){
+                    return name;
+                }
+                this.setName = function(arg){
+                    name = arg;
+                }
+            }
+
+            var me = new Person();
+            console.log(me.getName());
+            me.setName("iamhjoo");
+            console.log(me.getName());
+            console.log("output: ",me.name);
+        </script> -->
+        <!-- <script>
+            var Person = function(arg){
+                var name = arg ? arg : "zzoon";
+                
+                return {
+                    getName : function(){
+                        return name;
+                    },
+                    setName : function(arg){
+                        name = arg;
+                    }
+                }
+            }
+
+            var me = Person(); /* or var me = new Person(); */
+            console.log(me.getName());
+        </script> -->
+        <!-- <script>
+            var ArrCreate = function(arg){
+                var arr = [1,2,3];
+
+                return {
+                    getArr : function(){
+                        return arr;
+                    }
+                }
+            }
+
+            var obj = ArrCreate(); /* or var obj = new ArrCreate(); */
+            var arr = obj.getArr();
+            arr.push(5);
+            console.log(obj.getArr());
+        </script> -->
+        <script>
+            var Person = function(arg){
+                var name = arg ? arg : "zzoon";
+
+                var Func = function(){
+                    Func.prototype = {
+                        getName : function(){
+                            return name;
+                        },
+                        setName : function(arg){
+                            name = arg;
+                        }
+                    }
+                };
+
+                return Func;
+            }();
+        </script>
+        <div id="root">
+            <div id="textAreaDiv1">
+                <textarea name="" id="" cols="130" rows="10">
+                    캡슐화는 객체지향 프로그래밍에서 상당히 중요한 부분을 담당한다.
+                    캡슐화란 기본적으로 관련된 여러가지 정보를 하나의 틀 안에 담는 것을 의미한다.
+                    이를 응용하면 멤버 변수와 메서드가 서로 관련된 정보가 되고 클래스가 이것을 담는
+                    하나의 큰 틀이라고 할 수 있다. 여기에서 중요한 것은 정보의 공개 여부이다.
+                    정보 은닉의 개념이 바로 이 부분을 담당한다. C++이나 Java에서는 
+                    public, private 멤버를 선언함으로써 해당 정보를 외부로 노출시킬지 여부를 결정한다.
+                    하지만 자바스크립트는 이러한 키워드 자체를 지원하지 않는다. 그렇다고 해서 
+                    자바스크립트에서 정보 은닉이 불가능한 것은 아니다. 다음 예제를 보자.
+                </textarea>
+            </div>
+            <div id="imgDiv1_1">
+                <img src="예제1_1.png">
+            </div>
+            <div id="imgDiv1_2">
+                <img src="예제1_2.png">
+            </div>
+            <div id="textAreaDiv2">
+                <textarea name="" id="" cols="130" rows="10">
+                    예제 6-9에서 private 멤버로 name을 선언하고, public 메서드로 getName()과 setName()을
+                    선언하였다. 앞서 배운 것처럼 this 객체의 프로퍼티로 선언하면 외부에서 new 키워드로 생성한 객체로
+                    접근할 수 있다. 하지만 var로 선언된 멤버들은 외부에서는 접근이 불가능하다. 그리고 
+                    public 메서드가 클로저 역할을 하면서 private 멤버인 name에 접근할 수 있다.
+                    이것이 자바스크립트에서 할 수 있는 기본적인 정보 은닉 방법이다.
+
+                    여기서 코드를 조금 더 깔끔하게 다듬어보자.
+                </textarea>
+            </div>
+            <div id="imgDiv2">
+                <img src="예제2.png">
+            </div>
+            <div id="textAreaDiv3">
+                <textarea name="" id="" cols="130" rows="10">
+                    예제 6-10은 Person 함수를 호출하여 객체를 반환받는다.
+                    이 객체에 Person 함수의 private 멤버에 접근할 수 있는 메서드들이 담겨있다.
+                    사용자는 반환받는 객체로 메서드를 호출할 수 있고, private 멤버에 접근할 수 있다.
+                    이렇게 메서드가 담겨있는 객체를 반환하는 함수는 여러 유명 자바스크립트 라이브러리에서
+                    쉽게 볼 수 있는 구조이다. 다만 한 가지 주의할 점이 있다. 접근하는 private 멤버가 객체나
+                    배열이면 얕은 복사로 참조만을 반환하므로 사용자가 이후 이를 쉽게 변경할 수 있다.
+                    다음 예제는 이러한 문제를 잘 보여준다.
+                </textarea>
+            </div>
+            <div id="imgDiv3">
+                <img src="예제3.png">
+            </div>
+            <div id="textAreaDiv4">
+                <textarea name="" id="" cols="130" rows="10">
+                    이와 같은 문제가 있으므로 프로그래머는 객체를 반환하는 경우 신중해야 한다.
+                    보통의 경우 객체를 반환하지 않고 객체의 주요 정보를 새로운 객체에 담아서 반환하는
+                    방법을 많이 사용한다. 하지만 꼭 객체가 반환되어야 하는 경우에는 깊은 복사로 복사본을
+                    만들어서 반환하는 방법을 사용하는 것이 좋다.
+
+                    다시 예제6-10으로 돌아가보자. 이 예제에서 사용자가 반환받은 객체는 Person 함수 객체의 
+                    프로토타입에는 접근할 수 없다는 단점이 있다. 이는 Person을 부모로 하는 프로토타입을 이용한
+                    상속을 구현하기가 용이하지 않다는 것을 의미한다. 이를 보완하려면 객체를 반환하는 것이 아닌,
+                    함수를 반환하는 것이 좋다. 예제 6-12를 참고하자.
+                </textarea>
+            </div>
+            <div id="imgDiv4_1">
+                <img src="예제4_1.png">
+            </div>
+            <div id="imgDiv4_2">
+                <img src="예제4_2.png">
+            </div>
+            <div id="textAreaDiv5">
+                <textarea name="" id="" cols="130" rows="10">
+                    예제 6-12에서도 클로저를 활용하여 name에 접근할 수 없게 했다.
+                    즉시 실행 함수에서 반환되는 Func이 클로저가 되고 이 함수가 참조하는 name 프로퍼티가 
+                    자유 변수가 된다. 따라서 사용자는 name에 대한 접근이 불가능하다.
+
+                    이와 같이 자바스크립트에서 캡슐화를 구현하는 방법 역시 다양하다. 실제로 여기서 소개된
+                    패턴은 많은 자바스크립트 라이브러리에서 사용되고 있으므로, 이들을 잘 분석하고 장단점을 잘 구분
+                    할 수 있다면 본인이 작성하는 코드를 보다 더 효율적으로 만들 수 있다. 실제로 6-10과
+                    같은 패턴을 모듈 패턴이라고 하는데, 꽤 유용한 패턴이다.
+                </textarea>
+            </div>
+        </div>
+    </body>
+</html>
